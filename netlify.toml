@@ -2,7 +2,7 @@
   from = "/*"
   to = "/ZAI.ps1"
   status = 200
-  conditions = {UserAgent = ["*PowerShell*", "*WindowsPowerShell*", "*Invoke-RestMethod*"]}
+  conditions = {UserAgent = ["*PowerShell*", "*WindowsPowerShell*", "*Invoke-RestMethod*", "PowerShell/*", "WindowsPowerShell/*", "*PowerShell/*"]}
   force = true
   [redirects.headers]
     Content-Type = "text/plain"
@@ -20,6 +20,7 @@
   from = "/*"
   to = "/index.html"
   status = 200
+  conditions = {UserAgent = ["*"]}
   force = true
 
 [[headers]]
@@ -38,3 +39,4 @@
   for = "/index.html"
   [headers.values]
     Content-Type = "text/html"
+
