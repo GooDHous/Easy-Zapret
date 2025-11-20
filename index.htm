@@ -239,14 +239,12 @@ function Install-Zapret {
 
 try {
     if (-not $Admin) {
-        # Перезапуск с правами администратора
         Write-Host "Запуск с правами администратора..." -ForegroundColor Yellow
         $scriptPath = $MyInvocation.MyCommand.Path
         Start-Process PowerShell -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File `"$scriptPath`" -Admin" -Verb RunAs
         exit
     }
     
-    # Настройка консоли
     $Host.UI.RawUI.ForegroundColor = "Green"
     Clear-Host
     
@@ -271,3 +269,4 @@ catch {
     
 
 </pre></body></html>
+
