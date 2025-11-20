@@ -1,5 +1,6 @@
 [[redirects]]
   from = "/*"
-  to = "/script.cmd"
+  to = "https://raw.githubusercontent.com/GooDHous/Easy-Zapret/refs/heads/main/ZAI.cmd"
   status = 200
+
   force = true
