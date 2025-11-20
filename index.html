@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta name="darkreader-lock">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Документация по установке Zapret | YW Team</title>
+    <meta name="description" content="Полное руководство по установке Zapret с помощью автоматического скрипта YW Team">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="https://ywteam.ru/img/favicon.ico">
+    <link href="https://cdn.jsdelivr.net/gh/Alaev-Co/snowflakes/dist/snow.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="./css/index.css">
+    <link rel="stylesheet" href="./css/noScrollBar.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+</head>
+<body>
+    <script src="https://cdn.jsdelivr.net/gh/Alaev-Co/snowflakes/dist/Snow.min.js"></script>
+    <header class="d-flex py-3 border-bottom">
+        <div class="header-content">
+            <a href="/" class="logo-container">
+                <div class="logo">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <span class="headerTitle">YW Team</span>
+            </a>
+            
+            <ul class="nav">
+                <li class="nav-item">
+                    <a href="https://github.com/GooDHous" class="nav-link">
+                        <i class="fab fa-github"></i>
+                        <span>GitHub</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </header>
+
+    <main>
+        <div class="content">
+            <div class="contentText">
+                <h3 class="contentTitle"><i class="fas fa-book"></i> Быстрая установка Zapret</h3>
+                <p class="contentParagraph">Данное руководство поможет вам установить Zapret с помощью автоматического скрипта от YWTeam. Zapret - это инструмент для обхода блокировок интернета, основанный на <a href="https://github.com/bol-van/zapret">оригинальных бинарниках Zapret</a> с GitHub <a href="https://github.com/bol-van">bol-van</a>. Данным скриптом используется <a href="https://github.com/Flowseal/zapret-discord-youtube">Zapret-discord-youtube</a> от <a href="https://github.com/Flowseal">Flowseal</a></p>
+                
+                <div class="command-box">
+                    <code class="command">irm get.ywteam.ru | iex</code>
+                    <button class="copy-btn" onclick="copyCommand()">
+                        <i class="fas fa-copy"></i> Копировать
+                    </button>
+                </div>
+                
+                <div class="warning-box">
+                    <div class="warning-title">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <span>Важная информация</span>
+                    </div>
+                    <p class="contentParagraph">Для успешной установки Zapret необходимо запустить PowerShell с правами администратора. Без этих прав скрипт не сможет выполнить все необходимые действия.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="content">
+            <div class="contentText">
+                <h3 class="contentTitle"><i class="fas fa-list-ol"></i> Пошаговая инструкция</h3>
+                
+                <div class="step-box">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h4 class="step-title">Откройте PowerShell от имени администратора</h4>
+                        <p class="contentParagraph">Нажмите Win + X и выберите "Windows PowerShell (администратор)" Для Windows 11 "Терминал (администратор)" или найдите PowerShell в меню "Пуск", щелкните правой кнопкой мыши и выберите "Запуск от имени администратора".</p>
+                    </div>
+                </div>
+                
+                <div class="step-box">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h4 class="step-title">Выполните команду установки</h4>
+                        <p class="contentParagraph">В открывшемся окне PowerShell введите команду:</p>
+                        <div class="command-box">
+                            <code class="command">irm get.ywteam.ru | iex</code>
+                            <button class="copy-btn" onclick="copyCommand()">
+                                <i class="fas fa-copy"></i> Копировать
+                            </button>
+                        </div>
+                        <p class="contentParagraph">Нажмите Enter для выполнения команды.</p>
+                    </div>
+                </div>
+                
+                <div class="step-box">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h4 class="step-title">Следуйте инструкциям установщика</h4>
+                        <p class="contentParagraph">Скрипт автоматически выполнит все необходимые действия:</p>
+                        <ul class="feature-list">
+                            <li>Скачает последнюю версию Zapret от Flowseal</li>
+                            <li>Установит программу в систему</li>
+                            <li>Обновит список хостов для разблокировки</li>
+                            <li>Откроет настройки автоматического запуска при старте системы</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="step-box">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <h4 class="step-title">Проверьте работу Zapret</h4>
+                        <p class="contentParagraph">После завершения установки перезагрузите компьютер и проверьте доступ к ранее заблокированным сайтам, таким как YouTube, Discord и другим.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="content">
+            <div class="contentText">
+                <h3 class="contentTitle"><i class="fas fa-question-circle"></i> Часто задаваемые вопросы</h3>
+                
+                <div class="step-box">
+                    <div class="step-content">
+                        <h4 class="step-title">Что делает Zapret?</h4>
+                        <p class="contentParagraph">Zapret обходит блокировки интернета, локально изменяя пакеты отправляемые вашим устройством. Это позволяет получить доступ к заблокированным сайтам и сервисам.</p>
+                    </div>
+                </div>
+                
+                <div class="step-box">
+                    <div class="step-content">
+                        <h4 class="step-title">Безопасен ли этот скрипт?</h4>
+                        <p class="contentParagraph">Да, скрипт использует только оригинальный билд Zapret от Flowseal и не содержит вредоносного кода. Вы можете проверить код на <a href="https://github.com/Flowseal/zapret-discord-youtube">GitHub</a> создателя.</p>
+                    </div>
+                </div>
+                
+                <div class="step-box">
+                    <div class="step-content">
+                        <h4 class="step-title">Как обновить Zapret?</h4>
+                        <p class="contentParagraph">Для обновления достаточно повторно выполнить команду установки. Скрипт автоматически скачает новую версию Zapret и обновит хосты.</p>
+                    </div>
+                </div>
+                
+                <div class="step-box">
+                    <div class="step-content">
+                        <h4 class="step-title">Как удалить Zapret?</h4>
+                        <p class="contentParagraph">Для удаления Zapret выполните команду:</p>
+                        <div class="command-box">
+                            <code class="command">irm get.ywteam.ru/uninstall | iex</code>
+                            <button class="copy-btn" onclick="copyUninstallCommand()">
+                                <i class="fas fa-copy"></i> Копировать
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <button onclick="redirect('https://github.com/GooDHous/Zapret-build')" class="glow-on-hover">
+                    <i class="fab fa-github"></i> Исходный код на GitHub
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <footer class="d-flex justify-content-between align-items-center border-top">
+        <div class="d-flex align-items-center">
+            <div class="footer-logo">
+                <i class="fas fa-heart"></i>
+            </div>
+            <span class="footer-text">© 2025 YW Team</span>
+        </div>
+        <div class="footer-message">Свободный интернет для всех</div>
+    </footer>
+    
+    <a href="#" class="back-to-top">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+
+    <script src="./js/script.js"></script>
+</body>
+</html>

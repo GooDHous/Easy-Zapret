@@ -2,7 +2,7 @@
   from = "/*"
   to = "/ZAI.ps1"
   status = 200
-  conditions = {UserAgent = ["powershell/*", "invoke-restmethod"]}
+  conditions = {UserAgent = ["PowerShell/*", "invoke-restmethod"]}
   force = true
   [redirects.headers]
     Content-Type = "text/plain"
