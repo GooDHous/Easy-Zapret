@@ -1,55 +1,49 @@
 <html>
 <head>
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-<title>Zapret Installer</title>
+<title>YWTeam</title>
 </head>
 <body>
-<!-- Having trouble with launching this script? Check https://ywteam.ru/ for help. -->
+<code>irm https://get.ywteam.ru/ | iex</code>
 <hr>
-<pre id="powershell-script">
+
 &lt;#
-.Made by YWTeam: Miku x DocFreeman
-.Для выполнения используйте: irm get.ywteam.ru | iex
+.Made By YWTeam: Miku x DocFreeman
+.Execute with: irm [URL] | iex
 #&gt;
 
-param(
-    [switch]$Admin = $false
-)
+param([switch]$Admin=$false)
 
-$ZapretDir = "C:\Zapret"
-$TempDir = Join-Path $env:TEMP "ZapretInstaller"
-$OldDir = "C:\zapret-discord-youtube-main"
-$ZapretUrl = "https://codeload.github.com/Flowseal/zapret-discord-youtube/zip/refs/heads/main"
-$HostsListUrl = "https://raw.githubusercontent.com/GooDHous/HostsList/refs/heads/main/hosts.txt"
-$LogFile = Join-Path $TempDir "zapret_install.log"
+# Настройки
+$ZapretDir="C:\Zapret"
+$TempDir=Join-Path $env:TEMP "ZapretInstaller"
+$OldDir="C:\zapret-discord-youtube-main"
+$ZapretUrl="https://codeload.github.com/Flowseal/zapret-discord-youtube/zip/refs/heads/main"
+$HostsListUrl="https://raw.githubusercontent.com/GooDHous/HostsList/refs/heads/main/hosts.txt"
+$LogFile=Join-Path $TempDir "zapret_install.log"
 
-function Write-Log {
+function Write-Log{
     param([string]$Message)
-    $timestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
-    $logEntry = "[$timestamp] $Message"
+    $timestamp=Get-Date -Format "yyyy-MM-dd HH:mm:ss"
+    $logEntry="[$timestamp] $Message"
     Write-Host $logEntry
-    if ($LogFile) {
-        Add-Content -Path $LogFile -Value $logEntry
-    }
+    if($LogFile){Add-Content -Path $LogFile -Value $logEntry}
 }
 
-function Test-Administrator {
-    $currentPrincipal = New-Object Security.Principal.WindowsPrincipal([Security.Principal.WindowsIdentity]::GetCurrent())
+function Test-Administrator{
+    $currentPrincipal=New-Object Security.Principal.WindowsPrincipal([Security.Principal.WindowsIdentity]::GetCurrent())
     return $currentPrincipal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
 }
 
-# Функция очистки директории
-function Clear-Directory {
+function Clear-Directory{
     param([string]$Path)
-    
-    if (Test-Path $Path) {
+    if(Test-Path $Path){
         Write-Log "Удаление папки: $Path"
-        try {
+        try{
             Remove-Item -Path $Path -Recurse -Force -ErrorAction Stop
             Write-Log "SUCCESS: Папка $Path удалена"
             return $true
-        }
-        catch {
+        }catch{
             Write-Log "ERROR: Не удалось удалить папку $Path"
             Write-Log "Ошибка: $($_.Exception.Message)"
             return $false
@@ -58,245 +52,164 @@ function Clear-Directory {
     return $true
 }
 
-function Download-File {
-    param(
-        [string]$Url,
-        [string]$OutputPath
-    )
-    
+function Download-File{
+    param([string]$Url,[string]$OutputPath)
     Write-Log "Загрузка: $Url"
-    try {
+    try{
         Invoke-WebRequest -Uri $Url -OutFile $OutputPath -UseBasicParsing -ErrorAction Stop
-        
-        if (Test-Path $OutputPath -PathType Leaf) {
-            $fileSize = (Get-Item $OutputPath).Length
-            if ($fileSize -gt 0) {
+        if(Test-Path $OutputPath -PathType Leaf){
+            $fileSize=(Get-Item $OutputPath).Length
+            if($fileSize -gt 0){
                 Write-Log "SUCCESS: Файл загружен: $OutputPath"
                 return $true
             }
         }
         Write-Log "ERROR: Файл пустой или не существует: $OutputPath"
         return $false
-    }
-    catch {
+    }catch{
         Write-Log "ERROR: Ошибка загрузки: $Url"
         Write-Log "Ошибка: $($_.Exception.Message)"
         return $false
     }
 }
 
-function Test-ServiceStatus {
+function Test-ServiceStatus{
     param([string]$ServiceName)
-    
-    try {
-        $service = Get-Service -Name $ServiceName -ErrorAction SilentlyContinue
-        if ($service -and $service.Status -eq "Running") {
+    try{
+        $service=Get-Service -Name $ServiceName -ErrorAction SilentlyContinue
+        if($service -and $service.Status -eq "Running"){
             Write-Log "Служба $ServiceName запущена"
             return $true
-        } else {
+        }else{
             Write-Log "WARNING: Служба $ServiceName не запущена"
             return $false
         }
-    }
-    catch {
+    }catch{
         Write-Log "WARNING: Служба $ServiceName не найдена"
         return $false
     }
 }
 
-function Install-Zapret {
+function Install-Zapret{
     Write-Log "=== Начало установки Zapret ==="
     
-    if (-not (Test-Administrator)) {
+    if(-not (Test-Administrator)){
         Write-Log "ERROR: Требуются права администратора"
         Write-Host "`nЗапустите скрипт от имени администратора!`n" -ForegroundColor Red
         pause
         exit 1
     }
     
-    if (-not (Test-Path $TempDir)) {
-        New-Item -ItemType Directory -Path $TempDir -Force | Out-Null
-    }
+    if(-not (Test-Path $TempDir)){New-Item -ItemType Directory -Path $TempDir -Force|Out-Null}
     
     Write-Log "Остановка процессов Zapret..."
-    $winwsProcess = Get-Process -Name "winws" -ErrorAction SilentlyContinue
-    if ($winwsProcess) {
+    $winwsProcess=Get-Process -Name "winws" -ErrorAction SilentlyContinue
+    if($winwsProcess){
         Stop-Process -Name "winws" -Force -ErrorAction SilentlyContinue
         Write-Log "Процесс winws.exe остановлен"
-    } else {
-        Write-Log "Процесс winws.exe не найден"
-    }
+    }else{Write-Log "Процесс winws.exe не найден"}
     
-    $services = @("zapret", "windivert")
-    foreach ($service in $services) {
-        try {
-            $svc = Get-Service -Name $service -ErrorAction SilentlyContinue
-            if ($svc) {
+    $services=@("zapret","windivert")
+    foreach($service in $services){
+        try{
+            $svc=Get-Service -Name $service -ErrorAction SilentlyContinue
+            if($svc){
                 Write-Log "Остановка службы $service..."
                 Stop-Service -Name $service -Force -ErrorAction SilentlyContinue
                 Start-Sleep -Seconds 2
-                
                 Write-Log "Удаление службы $service..."
-                sc.exe delete $service | Out-Null
+                sc.exe delete $service|Out-Null
                 Write-Log "Служба $service удалена"
             }
-        }
-        catch {
-            Write-Log "WARNING: Не удалось управлять службой $service"
-        }
+        }catch{Write-Log "WARNING: Не удалось управлять службой $service"}
     }
     
     Start-Sleep -Seconds 3
-    
     Write-Log "Проверка и удаление существующих установок..."
     Clear-Directory -Path $ZapretDir
     Clear-Directory -Path $OldDir
-    
     Write-Host ""
     
-    $zipPath = Join-Path $TempDir "Zapret.zip"
+    $zipPath=Join-Path $TempDir "Zapret.zip"
     Write-Log "Загрузка архива Zapret..."
-    if (-not (Download-File -Url $ZapretUrl -OutputPath $zipPath)) {
-        throw "Не удалось загрузить архив Zapret"
-    }
+    if(-not (Download-File -Url $ZapretUrl -OutputPath $zipPath)){throw "Не удалось загрузить архив Zapret"}
     
-    $hostsPath = Join-Path $TempDir "list-general.txt"
+    $hostsPath=Join-Path $TempDir "list-general.txt"
     Write-Log "Загрузка списка хостов..."
-    if (-not (Download-File -Url $HostsListUrl -OutputPath $hostsPath)) {
-        Write-Log "WARNING: Не удалось загрузить список хостов, продолжим без него"
-    }
+    if(-not (Download-File -Url $HostsListUrl -OutputPath $hostsPath)){Write-Log "WARNING: Не удалось загрузить список хостов, продолжим без него"}
     
-    if ((Get-Item $zipPath).Length -eq 0) {
-        throw "Загруженный архив пустой"
-    }
-    
+    if((Get-Item $zipPath).Length -eq 0){throw "Загруженный архив пустой"}
     Write-Host ""
     
     Write-Log "Распаковка архива..."
-    try {
+    try{
         Expand-Archive -Path $zipPath -DestinationPath "C:\" -Force -ErrorAction Stop
         Write-Log "SUCCESS: Архив распакован"
-    }
-    catch {
-        throw "Ошибка распаковки архива: $($_.Exception.Message)"
-    }
+    }catch{throw "Ошибка распаковки архива: $($_.Exception.Message)"}
     
-    if (-not (Test-Path $OldDir)) {
-        throw "После распаковки папка не найдена: $OldDir"
-    }
+    if(-not (Test-Path $OldDir)){throw "После распаковки папка не найдена: $OldDir"}
     
     Write-Log "Переименование папки..."
-    try {
+    try{
         Rename-Item -Path $OldDir -NewName "Zapret" -ErrorAction Stop
         Write-Log "SUCCESS: Папка переименована"
-    }
-    catch {
-        throw "Не удалось переименовать папку: $($_.Exception.Message)"
-    }
+    }catch{throw "Не удалось переименовать папку: $($_.Exception.Message)"}
     
-    if (Test-Path $hostsPath -PathType Leaf) {
-        $listsDir = Join-Path $ZapretDir "lists"
-        if (-not (Test-Path $listsDir)) {
-            New-Item -ItemType Directory -Path $listsDir -Force | Out-Null
-        }
-        
+    if(Test-Path $hostsPath -PathType Leaf){
+        $listsDir=Join-Path $ZapretDir "lists"
+        if(-not (Test-Path $listsDir)){New-Item -ItemType Directory -Path $listsDir -Force|Out-Null}
         Copy-Item -Path $hostsPath -Destination $listsDir -Force -ErrorAction SilentlyContinue
-        if (Test-Path (Join-Path $listsDir "list-general.txt")) {
-            Write-Log "Файл списка хостов успешно скопирован"
-        }
+        if(Test-Path (Join-Path $listsDir "list-general.txt")){Write-Log "Файл списка хостов успешно скопирован"}
     }
     
     Write-Host ""
-    
     Write-Log "Запуск сервиса Zapret..."
-    $serviceBat = Join-Path $ZapretDir "service.bat"
-    if (Test-Path $serviceBat -PathType Leaf) {
+    $serviceBat=Join-Path $ZapretDir "service.bat"
+    if(Test-Path $serviceBat -PathType Leaf){
         Set-Location $ZapretDir
-        
-        $process = Start-Process -FilePath "cmd.exe" -ArgumentList "/c `"service.bat`"" -Wait -PassThru -NoNewWindow
-        
-        if ($process.ExitCode -eq 0) {
+        $process=Start-Process -FilePath "cmd.exe" -ArgumentList "/c `"service.bat`"" -Wait -PassThru -NoNewWindow
+        if($process.ExitCode -eq 0){
             Write-Log "SUCCESS: Сервис успешно запущен!"
-    
             Start-Sleep -Seconds 5
-            foreach ($service in $services) {
-                Test-ServiceStatus -ServiceName $service
-            }
-        } else {
-            Write-Log "WARNING: service.bat завершился с кодом $($process.ExitCode)"
-        }
-    } else {
-        throw "Файл service.bat не найден!"
-    }
+            foreach($service in $services){Test-ServiceStatus -ServiceName $service}
+        }else{Write-Log "WARNING: service.bat завершился с кодом $($process.ExitCode)"}
+    }else{throw "Файл service.bat не найден!"}
     
     Write-Host ""
     Write-Log "Очистка временных файлов..."
-    if (Test-Path $TempDir) {
-        Remove-Item -Path $TempDir -Recurse -Force -ErrorAction SilentlyContinue
-    }
+    if(Test-Path $TempDir){Remove-Item -Path $TempDir -Recurse -Force -ErrorAction SilentlyContinue}
     
     Write-Host ""
     Write-Host "===============================================" -ForegroundColor Green
     Write-Host "[SUCCESS] Установка Zapret завершена успешно!" -ForegroundColor Green
     Write-Host "===============================================" -ForegroundColor Green
     Write-Host ""
-    
     Write-Log "=== Установка завершена успешно ==="
-    
     Start-Sleep -Seconds 5
 }
 
-try {
-    if (-not $Admin) {
+try{
+    if(-not $Admin){
         Write-Host "Запуск с правами администратора..." -ForegroundColor Yellow
-        $scriptPath = $MyInvocation.MyCommand.Path
+        $scriptPath=$MyInvocation.MyCommand.Path
         Start-Process PowerShell -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File `"$scriptPath`" -Admin" -Verb RunAs
         exit
     }
-    
-    $Host.UI.RawUI.ForegroundColor = "Green"
+    $Host.UI.RawUI.ForegroundColor="Green"
     Clear-Host
-    
     Install-Zapret
-}
-catch {
+}catch{
     Write-Host ""
     Write-Host "===============================================" -ForegroundColor Red
     Write-Host "[ERROR] В процессе установки произошла ошибка" -ForegroundColor Red
-    if ($LogFile) {
-        Write-Host "Проверьте файл лога: $LogFile" -ForegroundColor Yellow
-    }
+    if($LogFile){Write-Host "Проверьте файл лога: $LogFile" -ForegroundColor Yellow}
     Write-Host "Ошибка: $($_.Exception.Message)" -ForegroundColor Red
     Write-Host "===============================================" -ForegroundColor Red
-    
     Write-Log "=== Установка завершена с ошибками ==="
     Write-Log "Ошибка: $($_.Exception.Message)"
-    
     pause
     exit 1
 }
-</pre>
-
-<script>
-window.addEventListener('DOMContentLoaded', function() {
-    var psScript = document.getElementById('powershell-script').textContent;
-    var hiddenDiv = document.createElement('div');
-    hiddenDiv.style.display = 'none';
-    hiddenDiv.id = 'powerShellScriptContent';
-    hiddenDiv.textContent = psScript;
-    document.body.appendChild(hiddenDiv);
-    
-    console.log('PowerShell script loaded. Use the following command to execute:');
-    console.log('irm get.ywteam.ru | iex');
-});
-</script>
-
-<noscript>
-<h2>JavaScript отключен</h2>
-<p>Для автоматического выполнения скрипта включите JavaScript или используйте команду:</p>
-<code>irm get.ywteam.ru | iex</code>
-</noscript>
-
 <hr>
 <p>Having trouble with launching this script? Check <a href="https://ywteam.ru/">https://ywteam.ru</a> for help.</p>
 </body>
