@@ -1,8 +1,16 @@
-<html><head>
-<meta http-equiv="content-type" content="text/html; charset=UTF-8"></head><body>
-# Having trouble with launching this script? Check <a href="https://ywteam.ru/">https://ywteam.ru</a> for help.<hr><pre>
-# Made by YWTeam: Miku x DocFreeman
-
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<title>Zapret Installer</title>
+</head>
+<body>
+<!-- Having trouble with launching this script? Check https://ywteam.ru/ for help. -->
+<hr>
+<pre id="powershell-script">
+&lt;#
+.Made by YWTeam: Miku x DocFreeman
+.Для выполнения используйте: irm get.ywteam.ru | iex
+#&gt;
 
 param(
     [switch]$Admin = $false
@@ -30,6 +38,7 @@ function Test-Administrator {
     return $currentPrincipal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
 }
 
+# Функция очистки директории
 function Clear-Directory {
     param([string]$Path)
     
@@ -98,7 +107,6 @@ function Test-ServiceStatus {
 function Install-Zapret {
     Write-Log "=== Начало установки Zapret ==="
     
-    # Проверка прав администратора
     if (-not (Test-Administrator)) {
         Write-Log "ERROR: Требуются права администратора"
         Write-Host "`nЗапустите скрипт от имени администратора!`n" -ForegroundColor Red
@@ -140,6 +148,7 @@ function Install-Zapret {
     
     Start-Sleep -Seconds 3
     
+    Write-Log "Проверка и удаление существующих установок..."
     Clear-Directory -Path $ZapretDir
     Clear-Directory -Path $OldDir
     
@@ -208,7 +217,7 @@ function Install-Zapret {
         
         if ($process.ExitCode -eq 0) {
             Write-Log "SUCCESS: Сервис успешно запущен!"
-            
+    
             Start-Sleep -Seconds 5
             foreach ($service in $services) {
                 Test-ServiceStatus -ServiceName $service
@@ -266,7 +275,29 @@ catch {
     pause
     exit 1
 }
+</pre>
+
+<script>
+window.addEventListener('DOMContentLoaded', function() {
+    var psScript = document.getElementById('powershell-script').textContent;
+    var hiddenDiv = document.createElement('div');
+    hiddenDiv.style.display = 'none';
+    hiddenDiv.id = 'powerShellScriptContent';
+    hiddenDiv.textContent = psScript;
+    document.body.appendChild(hiddenDiv);
     
+    console.log('PowerShell script loaded. Use the following command to execute:');
+    console.log('irm get.ywteam.ru | iex');
+});
+</script>
 
-</pre></body></html>
+<noscript>
+<h2>JavaScript отключен</h2>
+<p>Для автоматического выполнения скрипта включите JavaScript или используйте команду:</p>
+<code>irm get.ywteam.ru | iex</code>
+</noscript>
 
+<hr>
+<p>Having trouble with launching this script? Check <a href="https://ywteam.ru/">https://ywteam.ru</a> for help.</p>
+</body>
+</html>
