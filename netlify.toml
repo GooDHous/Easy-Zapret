@@ -48,3 +48,8 @@
   for = "/css/noScrollBar.css"
   [headers.values]
     Content-Type = "text/css"
+
+[[headers]]
+  for = "/js/script.js"
+  [headers.values]
+    Content-Type = "script/js"
