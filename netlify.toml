@@ -2,7 +2,7 @@
   from = "/*"
   to = "/ZAI.ps1"
   status = 200
-  conditions = {UserAgent = ["*PowerShell*", "*WindowsPowerShell*", "invoke-restmethod"]}
+  conditions = {UserAgent = ["*PowerShell*", "*WindowsPowerShell*", "*Invoke-RestMethod*"]}
   force = true
   [redirects.headers]
     Content-Type = "text/plain"
@@ -11,7 +11,7 @@
   from = "/*"
   to = "/ZAI.cmd"
   status = 200
-  conditions = {UserAgent = ["curl/*", "wget/*"]}
+  conditions = {UserAgent = ["*curl*", "*wget*"]}
   force = true
   [redirects.headers]
     Content-Type = "text/plain"
@@ -34,7 +34,7 @@
     Content-Type = "text/plain"
     X-Content-Type-Options = "nosniff"
 
-
-
-
-
+[[headers]]
+  for = "/index.html"
+  [headers.values]
+    Content-Type = "text/html"
