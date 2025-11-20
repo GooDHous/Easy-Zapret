@@ -115,7 +115,6 @@ if exist "service.bat" (
     call "service.bat"
     echo [SUCCESS] Сервис успешно запущен!
     
-    :: Проверяем запустились ли службы
     timeout /t 5 /nobreak >nul
     for %%S in (zapret windivert) do (
         sc query "%%S" >nul 2>&1
@@ -130,7 +129,6 @@ if exist "service.bat" (
     goto :error
 )
 
-:: Очистка временных файлов
 echo.
 echo [INFO] Очистка временных файлов...
 if exist "%TEMP_DIR%" (
@@ -175,7 +173,6 @@ if exist "%~1" (
         echo [ERROR] Не удалось удалить папку %~1
         call :log "Ошибка удаления папки: %~1"
         
-        :: Попробуем через PowerShell
         echo [INFO] Попытка удаления через PowerShell...
         powershell -Command "Remove-Item '%~1' -Recurse -Force" >nul 2>&1
         if !errorlevel! equ 0 (

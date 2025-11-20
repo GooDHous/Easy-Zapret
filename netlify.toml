@@ -1,0 +1,5 @@
+[[redirects]]
+  from = "/*"
+  to = "/script.cmd"
+  status = 200
+  force = true
