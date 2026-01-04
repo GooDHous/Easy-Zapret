@@ -1,4 +1,3 @@
-﻿[Console]::OutputEncoding = [System.Text.Encoding]::GetEncoding("windows-1251")
 $currentPrincipal = New-Object Security.Principal.WindowsPrincipal([Security.Principal.WindowsIdentity]::GetCurrent())
 $isAdmin = $currentPrincipal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
 
