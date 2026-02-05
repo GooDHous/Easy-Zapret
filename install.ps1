@@ -2,13 +2,12 @@ $currentPrincipal = New-Object Security.Principal.WindowsPrincipal([Security.Pri
 $isAdmin = $currentPrincipal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
 
 if (-NOT $isAdmin) {
-$arguments = "& '" + $myinvocation.mycommand.definition + "'"
-Start-Process powershell -Verb runAs -ArgumentList $arguments
-Break
+    $arguments = "& '" + $myinvocation.mycommand.definition + "'"
+    Start-Process powershell -Verb runAs -ArgumentList $arguments
+    Break
 }
-chcp 65001
 
-Write-Host "=== Установка Zapret ===" -ForegroundColor Green
+Write-Host "=== Installing Zapret ===" -ForegroundColor Green
 
 $ZAPRET_DIR = "C:\Zapret"
 $TEMP_DIR = "$env:TEMP\ZapretInstaller"
@@ -20,136 +19,125 @@ if (!(Test-Path $TEMP_DIR)) {
     New-Item -ItemType Directory -Path $TEMP_DIR -Force | Out-Null
 }
 
-
-Write-Host "1. Остановка процессов winws.exe..." -ForegroundColor Cyan
+Write-Host "1. Stopping winws.exe processes..." -ForegroundColor Cyan
 Get-Process -Name "winws" -ErrorAction SilentlyContinue | Stop-Process -Force -ErrorAction SilentlyContinue
 if ($?) {
-    Write-Host "   Процесс winws.exe остановлен" -ForegroundColor Green
+    Write-Host "   winws.exe process stopped" -ForegroundColor Green
 } else {
-    Write-Host "   Процесс winws.exe не найден" -ForegroundColor Yellow
+    Write-Host "   winws.exe process not found" -ForegroundColor Yellow
 }
 
-Write-Host "2. Остановка служб Zapret..." -ForegroundColor Cyan
+Write-Host "2. Stopping Zapret services..." -ForegroundColor Cyan
 Get-Service -Name "zapret" -ErrorAction SilentlyContinue | Stop-Service -Force -ErrorAction SilentlyContinue
 Get-Service -Name "windivert" -ErrorAction SilentlyContinue | Stop-Service -Force -ErrorAction SilentlyContinue
 Start-Sleep -Seconds 2
-Write-Host "   Службы остановлены" -ForegroundColor Green
+Write-Host "   Services stopped" -ForegroundColor Green
 
-Write-Host "3. Удаление старых установок..." -ForegroundColor Cyan
+Write-Host "3. Removing old installations..." -ForegroundColor Cyan
 @($ZAPRET_DIR, $OLD_DIR) | ForEach-Object {
     if (Test-Path $_) {
-        Write-Host "   Удаление папки: $_"
+        Write-Host "   Deleting folder: $_"
         Remove-Item -Path $_ -Recurse -Force -ErrorAction SilentlyContinue
         if (!(Test-Path $_)) {
-            Write-Host "   Папка удалена: $_" -ForegroundColor Green
+            Write-Host "   Folder deleted: $_" -ForegroundColor Green
         } else {
-            Write-Host "   Не удалось удалить папку: $_" -ForegroundColor Red
+            Write-Host "   Failed to delete folder: $_" -ForegroundColor Red
         }
     }
 }
 
-Write-Host "4. Загрузка архива Zapret..." -ForegroundColor Cyan
+Write-Host "4. Downloading Zapret archive..." -ForegroundColor Cyan
 try {
     Invoke-WebRequest -Uri $ZAPRET_URL -OutFile "$TEMP_DIR\Zapret.zip" -UseBasicParsing
     if (Test-Path "$TEMP_DIR\Zapret.zip") {
         $fileInfo = Get-Item "$TEMP_DIR\Zapret.zip"
-        Write-Host "   Архив Zapret загружен успешно ($($fileInfo.Length) байт)" -ForegroundColor Green
+        Write-Host "   Archive downloaded successfully ($($fileInfo.Length) bytes)" -ForegroundColor Green
     } else {
-        throw "Файл не создан"
+        throw "File not created"
     }
 } catch {
-    Write-Host "   Ошибка загрузки архива Zapret: $($_.Exception.Message)" -ForegroundColor Red
-    Write-Host "Нажмите любую клавишу для выхода..."
+    Write-Host "   Download error: $($_.Exception.Message)" -ForegroundColor Red
+    Write-Host "Press any key to exit..."
     [Console]::ReadKey()
     exit 1
 }
 
-Write-Host "5. Загрузка списка хостов..." -ForegroundColor Cyan
+Write-Host "5. Downloading hosts list..." -ForegroundColor Cyan
 try {
     Invoke-WebRequest -Uri $HOSTS_LIST_URL -OutFile "$TEMP_DIR\list-general.txt" -UseBasicParsing
     if (Test-Path "$TEMP_DIR\list-general.txt") {
-        Write-Host "   Список хостов загружен успешно" -ForegroundColor Green
-    } else {
-        Write-Host "   Не удалось загрузить список хостов" -ForegroundColor Yellow
+        Write-Host "   Hosts list downloaded successfully" -ForegroundColor Green
     }
 } catch {
-    Write-Host "   Ошибка загрузки списка хостов: $($_.Exception.Message)" -ForegroundColor Yellow
+    Write-Host "   Failed to download hosts list: $($_.Exception.Message)" -ForegroundColor Yellow
 }
 
-Write-Host "6. Распаковка архива..." -ForegroundColor Cyan
+Write-Host "6. Extracting archive..." -ForegroundColor Cyan
 try {
     Expand-Archive -Path "$TEMP_DIR\Zapret.zip" -DestinationPath "C:\" -Force
-    Write-Host "   Архив распакован успешно" -ForegroundColor Green
+    Write-Host "   Extraction completed" -ForegroundColor Green
 } catch {
-    Write-Host "   Ошибка распаковки архива: $($_.Exception.Message)" -ForegroundColor Red
-    Write-Host "Нажмите любую клавишу для выхода..."
+    Write-Host "   Extraction error: $($_.Exception.Message)" -ForegroundColor Red
+    Write-Host "Press any key to exit..."
     [Console]::ReadKey()
     exit 1
 }
 
-Write-Host "7. Проверка распакованной папки..." -ForegroundColor Cyan
+Write-Host "7. Verifying extracted folder..." -ForegroundColor Cyan
 if (Test-Path $OLD_DIR) {
-    Write-Host "   Папка найдена: $OLD_DIR" -ForegroundColor Green
+    Write-Host "   Folder found: $OLD_DIR" -ForegroundColor Green
 } else {
-    Write-Host "   Ошибка: папка не найдена после распаковки: $OLD_DIR" -ForegroundColor Red
-    Write-Host "Нажмите любую клавишу для выхода..."
+    Write-Host "   Error: target folder not found: $OLD_DIR" -ForegroundColor Red
+    Write-Host "Press any key to exit..."
     [Console]::ReadKey()
     exit 1
 }
 
-Write-Host "8. Переименование папки..." -ForegroundColor Cyan
+Write-Host "8. Renaming folder to Zapret..." -ForegroundColor Cyan
 try {
     Rename-Item -Path $OLD_DIR -NewName "Zapret" -Force
-    Write-Host "   Папка переименована успешно" -ForegroundColor Green
+    Write-Host "   Rename successful" -ForegroundColor Green
 } catch {
-    Write-Host "   Ошибка переименования папки: $($_.Exception.Message)" -ForegroundColor Red
-    Write-Host "Нажмите любую клавишу для выхода..."
+    Write-Host "   Rename error: $($_.Exception.Message)" -ForegroundColor Red
+    Write-Host "Press any key to exit..."
     [Console]::ReadKey()
     exit 1
 }
 
-Write-Host "9. Копирование списка хостов..." -ForegroundColor Cyan
+Write-Host "9. Copying hosts list to Zapret directory..." -ForegroundColor Cyan
 if (Test-Path "$TEMP_DIR\list-general.txt") {
     if (!(Test-Path "$ZAPRET_DIR\lists")) {
         New-Item -ItemType Directory -Path "$ZAPRET_DIR\lists" -Force | Out-Null
     }
-    Copy-Item -Path "$TEMP_DIR\list-general.txt" -Destination "$ZAPRET_DIR\lists\" -Force -ErrorAction SilentlyContinue
-    Write-Host "   Список хостов скопирован" -ForegroundColor Green
+    Copy-Item -Path "$TEMP_DIR\list-general.txt" -Destination "$ZAPRET_DIR\lists\" -Force
+    Write-Host "   Hosts list copied" -ForegroundColor Green
 }
 
-Write-Host "10. Запуск Zapret..." -ForegroundColor Cyan
+Write-Host "10. Starting Zapret service..." -ForegroundColor Cyan
 if (Test-Path "$ZAPRET_DIR\service.bat") {
     Set-Location $ZAPRET_DIR
-    Write-Host "   Текущая директория: $(Get-Location)"
-    Write-Host "   Запуск service.bat..."
-    
-    $process = Start-Process -FilePath "cmd.exe" -ArgumentList "/c service.bat"  -NoNewWindow -PassThru
-    
-    if ($process.ExitCode -eq 0) {
-        Write-Host "   Сервис запущен успешно" -ForegroundColor Green
-        Break
+    $process = Start-Process -FilePath "cmd.exe" -ArgumentList "/c service.bat" -NoNewWindow -PassThru
+    # Note: service.bat usually stays active, but we check if it failed immediately
+    if ($process.HasExited -and $process.ExitCode -ne 0) {
+        Write-Host "   Service failed to start. Exit code: $($process.ExitCode)" -ForegroundColor Yellow
     } else {
-        Write-Host "   Сервис запущен с кодом ошибки: $($process.ExitCode)" -ForegroundColor Yellow
+        Write-Host "   Service started successfully" -ForegroundColor Green
     }
-    
-    
 } else {
-    Write-Host "   Ошибка: файл service.bat не найден в $ZAPRET_DIR" -ForegroundColor Red
-    Write-Host "Нажмите любую клавишу для выхода..."
+    Write-Host "   Error: service.bat not found in $ZAPRET_DIR" -ForegroundColor Red
+    Write-Host "Press any key to exit..."
     [Console]::ReadKey()
     exit 1
 }
 
-Write-Host "11. Очистка временных файлов..." -ForegroundColor Cyan
+Write-Host "11. Cleaning up..." -ForegroundColor Cyan
 if (Test-Path $TEMP_DIR) {
     Remove-Item -Path $TEMP_DIR -Recurse -Force -ErrorAction SilentlyContinue
-    Write-Host "   Временные файлы удалены" -ForegroundColor Green
+    Write-Host "   Temporary files removed" -ForegroundColor Green
 }
 
-Write-Host ""
+Write-Host "`n===============================================" -ForegroundColor Green
+Write-Host "Installation completed successfully!" -ForegroundColor Green
 Write-Host "===============================================" -ForegroundColor Green
-Write-Host "Установка Zapret завершена успешно!" -ForegroundColor Green
-Write-Host "===============================================" -ForegroundColor Green
-Write-Host ""
-Write-Host "Нажмите любую клавишу для выхода..."
-
+Write-Host "`nPress any key to exit..."
+[Console]::ReadKey() | Out-Null

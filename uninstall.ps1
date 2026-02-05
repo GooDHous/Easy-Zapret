@@ -17,7 +17,6 @@ Get-Process -Name "winws" -ErrorAction SilentlyContinue | Stop-Process -Force -E
 Write-Host "2. Removing Zapret service..."
 if (Get-Service -Name "zapret" -ErrorAction SilentlyContinue) {
     Stop-Service -Name "zapret" -Force -ErrorAction SilentlyContinue
-    # Using sc.exe for guaranteed service removal
     & sc.exe delete "zapret" | Out-Null
 }
 
