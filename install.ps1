@@ -18,7 +18,6 @@ $TEMP_DIR = "$env:TEMP\ZapretInstaller"
 $OLD_DIR = "C:\zapret-discord-youtube-main"
 $ZAPRET_URL = "https://codeload.github.com/Flowseal/zapret-discord-youtube/zip/refs/heads/main"
 $HOSTS_LIST_URL = "https://raw.githubusercontent.com/GooDHous/HostsList/refs/heads/main/hosts.txt"
-$LOG_FILE = "$TEMP_DIR\zapret_install.log"
 
 if (!(Test-Path $TEMP_DIR)) {
     New-Item -ItemType Directory -Path $TEMP_DIR -Force | Out-Null
