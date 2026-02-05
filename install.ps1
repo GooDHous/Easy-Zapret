@@ -6,10 +6,7 @@ $arguments = "& '" + $myinvocation.mycommand.definition + "'"
 Start-Process powershell -Verb runAs -ArgumentList $arguments
 Break
 }
-
-$OutputEncoding = [console]::InputEncoding = [console]::OutputEncoding = New-Object System.Text.UTF8Encoding
-chcp 65001 | Out-Null
-[Console]::OutputEncoding = [System.Text.Encoding]::UTF8
+chcp 65001
 
 Write-Host "=== Установка Zapret ===" -ForegroundColor Green
 
@@ -155,3 +152,4 @@ Write-Host "Установка Zapret завершена успешно!" -Foreg
 Write-Host "===============================================" -ForegroundColor Green
 Write-Host ""
 Write-Host "Нажмите любую клавишу для выхода..."
+

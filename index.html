@@ -38,32 +38,10 @@
         </div>
     </header>
 
-    <main>
+    <main>     
         <div class="content">
             <div class="contentText">
-                <h3 class="contentTitle"><i class="fas fa-book"></i> Быстрая установка Zapret</h3>
-                <p class="contentParagraph">Данное руководство поможет вам установить Zapret с помощью автоматического скрипта от YWTeam. Zapret - это инструмент для обхода блокировок интернета, основанный на <a href="https://github.com/bol-van/zapret">оригинальных бинарниках Zapret</a> с GitHub <a href="https://github.com/bol-van">bol-van</a>. Данным скриптом используется <a href="https://github.com/Flowseal/zapret-discord-youtube">Zapret-discord-youtube</a> от <a href="https://github.com/Flowseal">Flowseal</a></p>
-                
-                <div class="command-box">
-                    <code class="command">irm https://get.ywteam.ru/install.ps1 | iex</code>
-                    <button class="copy-btn" onclick="copyCommand()">
-                        <i class="fas fa-copy"></i> Копировать
-                    </button>
-                </div>
-                
-                <div class="warning-box">
-                    <div class="warning-title">
-                        <i class="fas fa-exclamation-triangle"></i>
-                        <span>Важная информация</span>
-                    </div>
-                    <p class="contentParagraph">Для успешной установки Zapret необходимо запустить PowerShell с правами администратора. Без этих прав скрипт не сможет выполнить все необходимые действия.</p>
-                </div>
-            </div>
-        </div>
-        
-        <div class="content">
-            <div class="contentText">
-                <h3 class="contentTitle"><i class="fas fa-list-ol"></i> Пошаговая инструкция</h3>
+                <h3 class="contentTitle"><i class="fas fa-list-ol"></i> Быстрая установка Zapret</h3>
                 
                 <div class="step-box">
                     <div class="step-number">1</div>
@@ -79,7 +57,7 @@
                         <h4 class="step-title">Выполните команду установки</h4>
                         <p class="contentParagraph">В открывшемся окне PowerShell введите команду:</p>
                         <div class="command-box">
-                            <code class="command">irm get.ywteam.ru | iex</code>
+                            <code class="command">irm https://get.ywteam.ru/install.ps1 | iex</code>
                             <button class="copy-btn" onclick="copyCommand()">
                                 <i class="fas fa-copy"></i> Копировать
                             </button>
@@ -96,8 +74,8 @@
                         <ul class="feature-list">
                             <li>Скачает последнюю версию Zapret от Flowseal</li>
                             <li>Установит программу в систему</li>
-                            <li>Обновит список хостов для разблокировки</li>
-                            <li>Откроет настройки автоматического запуска при старте системы</li>
+                            <li>Загрузит список заблокированных сайтов от YWTeam</li>
+                            <li>Откроет services.bat где вы сможете выбрать необходимаю стратегию</li>
                         </ul>
                     </div>
                 </div>
@@ -114,19 +92,19 @@
         
         <div class="content">
             <div class="contentText">
-                <h3 class="contentTitle"><i class="fas fa-question-circle"></i> Часто задаваемые вопросы</h3>
+                <h3 class="contentTitle"><i class="fas fa-question-circle"></i> Важная информация</h3>
                 
                 <div class="step-box">
                     <div class="step-content">
-                        <h4 class="step-title">Что делает Zapret?</h4>
-                        <p class="contentParagraph">Zapret обходит блокировки интернета, локально изменяя пакеты отправляемые вашим устройством. Это позволяет получить доступ к заблокированным сайтам и сервисам.</p>
+                        <h4 class="step-title">Куда устанавливается Zapret?</h4>
+                        <p class="contentParagraph">Данный скрипт устанавливает Zapret по пути C:\Zapret</p>
                     </div>
                 </div>
                 
                 <div class="step-box">
                     <div class="step-content">
                         <h4 class="step-title">Безопасен ли этот скрипт?</h4>
-                        <p class="contentParagraph">Да, скрипт использует только оригинальный билд Zapret от Flowseal и не содержит вредоносного кода. Вы можете проверить код на <a href="https://github.com/Flowseal/zapret-discord-youtube">GitHub</a> создателя.</p>
+                        <p class="contentParagraph">Да, скрипт использует Zapret от Flowseal и не содержит вредоносного кода. Вы можете проверить код на Github <a href="https://github.com/Flowseal/zapret-discord-youtube">Zapret</a>-а и <a href="https://github.com/GooDHous/Easy-Zapret">Данного скрипта</a>.</p>
                     </div>
                 </div>
                 
