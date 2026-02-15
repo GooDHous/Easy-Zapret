@@ -46,12 +46,12 @@ Write-Host "3. Removing old installations..." -ForegroundColor Cyan
     }
 }
 
-Write-Host "4. Downloading Zapret archive..." -ForegroundColor Cyan
+Write-Host "4. Downloading Zapret..." -ForegroundColor Cyan
 try {
     Invoke-WebRequest -Uri $ZAPRET_URL -OutFile "$TEMP_DIR\Zapret.zip" -UseBasicParsing
     if (Test-Path "$TEMP_DIR\Zapret.zip") {
         $fileInfo = Get-Item "$TEMP_DIR\Zapret.zip"
-        Write-Host "   Archive downloaded successfully ($($fileInfo.Length) bytes)" -ForegroundColor Green
+        Write-Host "   Zapret downloaded successfully ($($fileInfo.Length) bytes)" -ForegroundColor Green
     } else {
         throw "File not created"
     }
