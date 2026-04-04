@@ -19,7 +19,14 @@ if (!(Test-Path $TEMP_DIR)) {
     New-Item -ItemType Directory -Path $TEMP_DIR -Force | Out-Null
 }
 
-Write-Host "1. Stopping winws.exe processes..." -ForegroundColor Cyan
+Write-Host "1. Stopping Zapret services..." -ForegroundColor Cyan
+Get-Service -Name "zapret" -ErrorAction SilentlyContinue | Stop-Service -Force -ErrorAction SilentlyContinue
+Get-Service -Name "zapret_build" -ErrorAction SilentlyContinue | Stop-Service -Force -ErrorAction SilentlyContinue
+Get-Service -Name "windivert" -ErrorAction SilentlyContinue | Stop-Service -Force -ErrorAction SilentlyContinue
+Start-Sleep -Seconds 1
+Write-Host "   Services stopped" -ForegroundColor Green
+
+Write-Host "2. Stopping winws.exe processes..." -ForegroundColor Cyan
 Get-Process -Name "winws" -ErrorAction SilentlyContinue | Stop-Process -Force -ErrorAction SilentlyContinue
 if ($?) {
     Write-Host "   winws.exe process stopped" -ForegroundColor Green
@@ -27,11 +34,7 @@ if ($?) {
     Write-Host "   winws.exe process not found" -ForegroundColor Yellow
 }
 
-Write-Host "2. Stopping Zapret services..." -ForegroundColor Cyan
-Get-Service -Name "zapret" -ErrorAction SilentlyContinue | Stop-Service -Force -ErrorAction SilentlyContinue
-Get-Service -Name "windivert" -ErrorAction SilentlyContinue | Stop-Service -Force -ErrorAction SilentlyContinue
-Start-Sleep -Seconds 2
-Write-Host "   Services stopped" -ForegroundColor Green
+
 
 Write-Host "3. Removing old installations..." -ForegroundColor Cyan
 @($ZAPRET_DIR, $OLD_DIR) | ForEach-Object {
@@ -138,6 +141,7 @@ if (Test-Path $TEMP_DIR) {
 
 Write-Host "`n===============================================" -ForegroundColor Green
 Write-Host "Installation completed successfully!" -ForegroundColor Green
+Write-Host "Made By Miku for YWTeam!" -ForegroundColor Green
 Write-Host "===============================================" -ForegroundColor Green
 Write-Host "`nPress any key to exit..."
 [Console]::ReadKey() | Out-Null
